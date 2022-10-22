@@ -1,0 +1,122 @@
+/* 
+--1
+SELECT 
+  p.pr_name,
+  g.provider_id,
+  g.go_name,
+  g.weight,
+  g.color,
+  g.material,
+  g.price
+from provider p
+  INNER JOIN goods g 
+      ON p.provider_id=g.provider_id
+WHERE p.pr_name = 'DLM'
+*/
+
+
+/*
+--2
+SELECT 
+  c.cl_name,
+  SUM(cl.total_price) as suma
+FROM cl_order cl 
+  INNER JOIN client c
+    ON c.client_id=cl.client_id
+GROUP BY c.cl_name
+ORDER BY suma DESC
+*/
+
+
+/*
+--3
+WITH temporaryTable AS (
+	SELECT cl_name, SUM(total_price) as suma
+	FROM client
+	INNER JOIN cl_order ON client.client_id=cl_order.client_id
+	GROUP BY cl_name, total_price
+)
+SELECT *
+FROM temporaryTable 
+WHERE suma = (
+SELECT MAX(suma)
+FROM temporaryTable
+)
+*/
+
+
+/*
+SELECT 
+  p.pr_name,
+  p.id_number,
+  p.pr_address,
+  p.pr_telephone,
+  COUNT(p.provider_id) 
+from provider p
+	INNER JOIN goods g 
+    	ON p.provider_id=g.provider_id
+GROUP BY
+	p.pr_name,
+	p.id_number,
+	p.pr_address,
+	p.pr_telephone
+HAVING COUNT(p.provider_id) > 1 
+*/
+
+SELECT 
+  c.cl_name,
+  SUM(cl.total_price) as suma
+FROM cl_order cl 
+  INNER JOIN client c
+    ON c.client_id=cl.client_id
+GROUP BY c.cl_name
+ORDER BY suma DESC
+
+1
+INSERT INTO Factory(title, address) VALUES ('Oakland details', 'Oakland');
+
+2
+UPDATE Details
+SET color = 'Grey'
+WHERE weight >  50000 AND amount <10;
+
+3
+DELETE FROM Details WHERE color = 'Red' AND  weight=25000
+
+4
+SELECT
+Factory.title,
+Details.color,
+Details.weight
+FROM Factory
+INNER JOIN Details
+ON Factory.factory_id=Details.factory_id
+WHERE Factory.weight BETWEEN 10000 AND 50000
+AND Factory.amount<100
+GROUP BY Factory.title, Details.color,
+Details.weight
+
+5
+SELECT 
+ Factory.address,
+ Details.color,
+FROM Factory 
+ INNER JOIN Details  
+ON Factory.factory_id=Details.factory_id
+WHERE Details.color='Black' AND Details.weight>50000
+GROUP BY address.Factory, color.Details
+HAVING Factory.amount = (SELECT MAX(amount) FROM Factory);
+
+6
+SELECT
+Details.details_id,
+Factory.address,
+Details.weight,
+Details.amount
+FROM Factory
+INNER JOIN Details
+ON Factory.factory_id=Details.factory_id
+WHERE Factory.address='Brisben'
+AND Details.weight<10000 OR
+Factory.address='Vellingtone' AND Details.amount>50
+
